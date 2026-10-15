@@ -56,6 +56,17 @@ Turn the tail of a long process log into a notification body:
 tail -n 50 build.log | afm-summarize | xargs -I{} osascript -e 'display notification "{}" with title "Build"'
 ```
 
+## Using `fm` on macOS 27
+
+macOS 27 ships `fm`, Apple's own command-line tool for the same on-device model. If you only need macOS 27 or later, you can get a similar summary without installing anything:
+
+```bash
+printf '%s' "$LONG_TEXT" | fm respond --no-stream \
+  -i 'Summarize the text in one plain-text sentence of at most 100 characters. Output only the sentence.'
+```
+
+afm-summarize still covers a few things that `fm` leaves to you. It runs on macOS 26, it enforces `--max-chars` by cutting at a word boundary when the model overshoots, and it uses separate exit codes for a missing model and a failed generation. `fm` also needs a one-time `sudo fm license` to accept Apple's terms before it runs anything. See `man fm` for the rest.
+
 ## License
 
 [MIT](LICENSE)
